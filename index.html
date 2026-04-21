@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Ligitive Internet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, 'Roboto', monospace;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a0303 0%, #2d0a0a 50%, #1a0303 100%);
+            color: #f0e0e0;
+            padding: 0.8rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .mono-header {
+            background: #1f0505;
+            border-bottom: 3px solid #c0392b;
+            border-radius: 1.5rem 1.5rem 1rem 1rem;
+            padding: 0.8rem 1rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            box-shadow: 0 8px 20px rgba(180, 30, 30, 0.3);
+        }
+
+        .logo h1 {
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+            font-weight: 700;
+            font-variant: small-caps;
+            font-family: 'Segoe UI', 'Playfair Display', 'Georgia', serif;
+            background: linear-gradient(135deg, #ff6b6b, #c0392b, #ff9999);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 12px rgba(220, 40, 40, 0.4);
+        }
+
+        .logo p {
+            font-size: 0.6rem;
+            color: #e0a0a0;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .rank-badge {
+            background: #2a0a0a;
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+            border-left: 3px solid #e74c3c;
+            font-weight: bold;
+            font-size: 0.75rem;
+            color: #ffcccc;
+            box-shadow: 0 0 8px rgba(200, 40, 40, 0.3);
+        }
+
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+            margin-bottom: 1.2rem;
+        }
+
+        @media (min-width: 800px) {
+            .grid-2col {
+                grid-template-columns: 1fr 1.2fr;
+                gap: 1.5rem;
+            }
+            body {
+                padding: 1.2rem;
+            }
+            .logo h1 {
+                font-size: 2rem;
+            }
+            .mono-header {
+                padding: 1rem 1.5rem;
+            }
+        }
+
+        .card {
+            background: #1a0808e6;
+            backdrop-filter: blur(4px);
+            border-radius: 1.2rem;
+            border: 1px solid #922b2b;
+            padding: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .card h2 {
+            border-left: 4px solid #e74c3c;
+            padding-left: 0.7rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #ffdddd;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            background: #2a0f0f;
+            border: 1px solid #aa3a3a;
+            padding: 0.7rem 0.9rem;
+            border-radius: 1rem;
+            color: #ffe0e0;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 8px rgba(231, 76, 60, 0.4);
+            background: #331212;
+        }
+
+        button {
+            background: #8b1a1a;
+            border: 1px solid #c0392b;
+            color: white;
+            font-weight: bold;
+            padding: 0.7rem 1.2rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px #3a0000;
+            width: 100%;
+            margin-top: 0.4rem;
+        }
+
+        button:hover {
+            background: #c0392b;
+            transform: scale(1.01);
+            border-color: #e74c3c;
+            box-shadow: 0 4px 12px rgba(200, 40, 40, 0.5);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            background: #5a1515;
+        }
+
+        .telegram-btn {
+            background: #8b1a1a;
+            border: 1px solid #c0392b;
+        }
+        .telegram-btn:hover {
+            background: #c0392b;
+        }
+        .complain-btn {
+            background: #5a1515;
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            width: auto;
+            margin: 0;
+        }
+
+        .cases-list {
+            margin-top: 0.8rem;
+            max-height: 500px;
+            overflow-y: auto;
+            border-radius: 1rem;
+            padding: 0.2rem;
+        }
+
+        .case-item {
+            background: #1f0c0c;
+            margin-bottom: 0.8rem;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            border-left: 4px solid #c0392b;
+        }
+
+        .case-header {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            align-items: baseline;
+            margin-bottom: 0.4rem;
+            gap: 0.4rem;
+        }
+
+        .case-title {
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: #ffc5c5;
+        }
+
+        .case-author {
+            font-size: 0.65rem;
+            background: #3a1818;
+            padding: 0.2rem 0.5rem;
+            border-radius: 1rem;
+            color: #ffaaaa;
+            cursor: pointer;
+        }
+
+        .case-goal, .case-desc, .case-reason {
+            font-size: 0.75rem;
+            margin: 0.3rem 0;
+            color: #e0b0b0;
+            line-height: 1.3;
+        }
+
+        .case-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.4rem;
+            font-size: 0.65rem;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .delete-case-btn {
+            background: #5a1515;
+            border: 1px solid #aa3a3a;
+            color: #ffaaaa;
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            width: auto;
+            margin: 0;
+        }
+
+        .empty-message, .login-message {
+            text-align: center;
+            color: #cc8888;
+            padding: 1.5rem;
+            font-style: italic;
+            background: #2a1010;
+            border-radius: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        hr {
+            border-color: #7a2525;
+            margin: 0.6rem 0;
+        }
+
+        .info-note {
+            font-size: 0.65rem;
+            background: #2a0f0f;
+            padding: 0.4rem;
+            border-radius: 1rem;
+            text-align: center;
+            color: #ffbbbb;
+            margin-top: 0.6rem;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 5, 5, 0.96);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 0.8rem;
+        }
+
+        .modal-content {
+            background: #1f0a0a;
+            border: 2px solid #c0392b;
+            border-radius: 1.2rem;
+            max-width: 550px;
+            width: 100%;
+            padding: 1.2rem;
+            box-shadow: 0 20px 35px #5a000060;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            background: #3a1515;
+            margin-top: 0.5rem;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.4rem;
+            background: #2a0f0f;
+            border-bottom: 2px solid #7a2525;
+            border-radius: 0.8rem 0.8rem 0 0;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .tab-btn.active {
+            background: #4a1818;
+            border-bottom-color: #e74c3c;
+            color: white;
+        }
+
+        .admin-panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.96);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 0.8rem;
+        }
+
+        .admin-panel {
+            background: #1a0808;
+            border: 2px solid #c0392b;
+            border-radius: 1.2rem;
+            width: 100%;
+            max-width: 1000px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-header {
+            padding: 0.8rem;
+            border-bottom: 2px solid #c0392b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .admin-content {
+            padding: 0.8rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .user-list-item {
+            background: #2a0f0f;
+            margin-bottom: 0.5rem;
+            padding: 0.6rem;
+            border-radius: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        @media (min-width: 600px) {
+            .user-list-item {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .rank-select {
+            width: auto;
+            margin-bottom: 0;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .admin-btn-small, .pin-btn, .ban-btn, .delete-user-btn {
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            width: auto;
+            margin: 0;
+        }
+
+        .profile-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #c0392b;
+            cursor: pointer;
+        }
+
+        .search-result {
+            background: #2a0f0f;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .session-item {
+            background: #2a0f0f;
+            margin-bottom: 0.4rem;
+            padding: 0.4rem;
+            border-radius: 0.8rem;
+            font-size: 0.7rem;
+            border-left: 3px solid #c0392b;
+            color: #ffffff;
+        }
+
+        .session-current {
+            border-left-color: #ffaa66;
+            background: #3a1818;
+        }
+
+        .rank-text-owner {
+            background: linear-gradient(135deg, #FFD700, #FFA500, #FF4500);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: bold;
+        }
+        .rank-text-moderator {
+            background: linear-gradient(135deg, #7B68EE, #9370DB, #BA55D3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .rank-text-analyst {
+            background: linear-gradient(135deg, #20B2AA, #3CB371, #2E8B57);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .rank-text-curator {
+            background: linear-gradient(135deg, #00B4DB, #0083B0, #00CED1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .pinned-badge {
+            background: #8b2a2a;
+            color: #ffd966;
+            padding: 0.2rem 0.4rem;
+            border-radius: 1rem;
+            font-size: 0.6rem;
+            margin-left: 0.3rem;
+            border-left: 2px solid #ffaa66;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+        }
+        .checkbox-label input {
+            width: auto;
+            margin-bottom: 0;
+        }
+        .edit-username-btn {
+            background: #5a1515;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            width: auto;
+            margin-left: 0.3rem;
+            border-radius: 1rem;
+        }
+        .id-copy {
+            font-family: monospace;
+            font-size: 0.7rem;
+            background: #2a0f0f;
+            padding: 0.2rem 0.4rem;
+            border-radius: 1rem;
+            display: inline-block;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .id-copy:hover {
+            background: #c0392b;
+        }
+        @media (max-width: 480px) {
+            .mono-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .card h2 {
+                font-size: 1.1rem;
+            }
+            button {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+            .profile-avatar {
+                width: 45px;
+                height: 45px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="mono-header">
+        <div class="logo">
+            <h1>LEGITIVE INTERNET</h1>
+            <p>• Красный уровень доступа</p>
+        </div>
+        <div class="rank-badge" id="globalRankDisplay">Гость</div>
+    </div>
+
+    <div class="grid-2col">
+        <div class="card">
+            <h2>МЕНЮ</h2>
+            <div id="authArea"></div>
+            <hr>
+            <div id="proposeButtonArea">
+                <button id="openProposeModalBtn" disabled>ПРЕДЛОЖИТЬ КЕЙС</button>
+            </div>
+            <div id="cabinetButtonArea">
+                <button id="openCabinetBtn" style="background:#6b1a1a; display:none;">ЛИЧНЫЙ КАБИНЕТ</button>
+            </div>
+            <div id="adminButtonArea">
+                <button id="openAdminPanelBtn" class="admin-btn" style="background:#6b1a1a; display:none;">АДМИН ПАНЕЛЬ</button>
+            </div>
+            <div id="telegramButtonArea">
+                <button id="telegramBtn" class="telegram-btn" style="background:#8b1a1a;">НАШ TELEGRAM</button>
+            </div>
+            <div id="loggedInfo" style="margin-top: 0.6rem; font-size: 0.7rem; background:#2a0f0f; padding:0.4rem; border-radius:1rem;"></div>
+        </div>
+
+        <div class="card">
+            <h2>КЕЙСЫ</h2>
+            <div id="casesContainer" class="cases-list"><div class="empty-message">Загрузка...</div></div>
+            <div class="info-note">Нажмите на ник автора / Жалоба под кейсом / 1 кейс в сутки</div>
+        </div>
+    </div>
+
+    <div class="card search-area">
+        <h2>ПОИСК</h2>
+        <div id="searchBlock"></div>
+    </div>
+    <footer style="text-align:center; margin-top:1.2rem; color:#b55a5a; font-size:0.65rem;">© LEGITIVE INTERNET — Все права защищены!</footer>
+</div>
+
+<script>
+    (function(){
+        async function hashPassword(pwd) {
+            const enc = new TextEncoder();
+            const buf = await crypto.subtle.digest('SHA-256', enc.encode(pwd));
+            return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+        }
+
+        async function getClientIP() {
+            try { const r=await fetch('https://api.ipify.org?format=json'); const d=await r.json(); return d.ip; } catch(e){ return '127.0.0.1'; }
+        }
+
+        let currentIP = 'загрузка...';
+        let currentSessionId = null;
+        let currentUser = null;
+
+        async function addLog(action, username, success=true) {
+            if(currentIP==='загрузка...') currentIP = await getClientIP();
+            let logs = JSON.parse(localStorage.getItem("osint_logs")||'[]');
+            logs.unshift({id:Date.now(), timestamp:new Date().toISOString(), ip:currentIP, action, username, success});
+            if(logs.length>150) logs.pop();
+            localStorage.setItem("osint_logs", JSON.stringify(logs));
+        }
+
+        function getSessions() { return JSON.parse(localStorage.getItem("osint_sessions")||'{}'); }
+        function saveSessions(s) { localStorage.setItem("osint_sessions", JSON.stringify(s)); }
+
+        async function createSession(uid) {
+            let sess = getSessions();
+            if(!sess[uid]) sess[uid] = [];
+            const sid = Date.now() + '_' + Math.random().toString(36).substr(2,8);
+            const ip = await getClientIP();
+            const ua = navigator.userAgent;
+            let device = 'Unknown';
+            if(ua.includes('Windows')) device='Windows PC';
+            else if(ua.includes('Mac')) device='Mac';
+            else if(ua.includes('Linux')) device='Linux';
+            else if(ua.includes('Android')) device='Android';
+            else if(ua.includes('iPhone')||ua.includes('iPad')) device='iOS';
+            sess[uid].push({sessionId:sid, ip, userAgent:ua, device, loginTime:new Date().toISOString(), lastActive:new Date().toISOString()});
+            saveSessions(sess);
+            return sid;
+        }
+
+        function terminateSession(uid, sid) {
+            let sess = getSessions();
+            if(sess[uid]) sess[uid] = sess[uid].filter(s=>s.sessionId!==sid);
+            saveSessions(sess);
+        }
+
+        function getSessionsForUser(uid) { return getSessions()[uid] || []; }
+
+        function generateUserId(users) {
+            let newId;
+            let exists;
+            do {
+                newId = Math.floor(10000000 + Math.random() * 90000000).toString();
+                exists = users.some(u => u.userId === newId);
+            } while (exists);
+            return newId;
+        }
+
+        function migrateUserIds() {
+            let users = JSON.parse(localStorage.getItem("osint_users")||'[]');
+            let needSave = false;
+            for(let u of users){
+                if(!u.userId){
+                    let padded = u.id.toString().padStart(8, '0');
+                    let existing = users.some(x=>x.userId === padded);
+                    if(existing){
+                        u.userId = generateUserId(users);
+                    } else {
+                        u.userId = padded;
+                    }
+                    needSave = true;
+                }
+            }
+            if(needSave){
+                localStorage.setItem("osint_users", JSON.stringify(users));
+            }
+        }
+
+        function getRankIcon(r){
+            if(r==='owner') return '👑';
+            if(r==='moderator') return '🛡️';
+            if(r==='analyst') return '🕵️';
+            if(r==='curator') return '🎓';
+            return '🔹';
+        }
+        function getRankName(r){
+            if(r==='owner') return 'Владелец';
+            if(r==='moderator') return 'Модератор';
+            if(r==='analyst') return 'Аналитик';
+            if(r==='curator') return 'Куратор';
+            return 'Пользователь';
+        }
+        function getRankDisplay(r){
+            let cls='rank-text-user';
+            if(r==='owner') cls='rank-text-owner';
+            else if(r==='moderator') cls='rank-text-moderator';
+            else if(r==='analyst') cls='rank-text-analyst';
+            else if(r==='curator') cls='rank-text-curator';
+            return `${getRankIcon(r)} <span class="${cls}">${getRankName(r)}</span>`;
+        }
+
+        function getUserAvatarUrl(uname){
+            let users = JSON.parse(localStorage.getItem("osint_users")||'[]');
+            let u = users.find(u=>u.username===uname);
+            if(u && u.avatar) return u.avatar;
+            return `https://ui-avatars.com/api/?name=${encodeURIComponent(uname)}&background=c0392b&color=fff&size=80&rounded=true&bold=true`;
+        }
+
+        async function uploadAvatar(uid, uname){
+            let inp = document.createElement('input');
+            inp.type='file';
+            inp.accept='image/*';
+            inp.onchange=async(e)=>{
+                let f=e.target.files[0];
+                if(!f) return;
+                if(f.size>2*1024*1024){ alert("Файл >2МБ"); return; }
+                let rd=new FileReader();
+                rd.onload=async(ev)=>{
+                    let dataUrl=ev.target.result;
+                    let users=JSON.parse(localStorage.getItem("osint_users")||'[]');
+                    let idx=users.findIndex(u=>u.id===uid);
+                    if(idx!==-1){
+                        users[idx].avatar=dataUrl;
+                        localStorage.setItem("osint_users", JSON.stringify(users));
+                        if(currentUser && currentUser.id===uid) currentUser.avatar=dataUrl;
+                        await addLog("Загрузка аватара", uname, true);
+                        alert("Аватар обновлён");
+                        renderAuthUI();
+                        renderCasesList();
+                        updateGlobalRankDisplay();
+                        updateSearchBlock();
+                    }
+                };
+                rd.readAsDataURL(f);
+            };
+            inp.click();
+        }
+
+        async function changeUsername(newUsername, user, modalToClose) {
+            newUsername = newUsername.trim();
+            if(newUsername === user.username){
+                alert("Новый ник совпадает со старым");
+                return false;
+            }
+            if(!/^[a-zA-Z0-9_]+$/.test(newUsername)){
+                alert("Только латинские буквы, цифры, _");
+                return false;
+            }
+            if(newUsername.toLowerCase() === "despite"){
+                alert("Ник зарезервирован");
+                return false;
+            }
+            let users = JSON.parse(localStorage.getItem("osint_users")||'[]');
+            if(users.find(u=>u.username.toLowerCase() === newUsername.toLowerCase())){
+                alert("Ник занят");
+                return false;
+            }
+            let oldUsername = user.username;
+            let idx = users.findIndex(u=>u.id===user.id);
+            if(idx !== -1){
+                users[idx].username = newUsername;
+                localStorage.setItem("osint_users", JSON.stringify(users));
+                let cases = JSON.parse(localStorage.getItem("osint_cases")||'[]');
+                let updated = false;
+                for(let c of cases){
+                    if(c.authorId === user.id && c.authorName === oldUsername){
+                        c.authorName = newUsername;
+                        updated = true;
+                    }
+                }
+                if(updated) localStorage.setItem("osint_cases", JSON.stringify(cases));
+                if(currentUser && currentUser.id === user.id){
+                    currentUser.username = newUsername;
+                    localStorage.setItem("currentUserId", currentUser.id);
+                }
+                await addLog(`Смена ника с ${oldUsername} на ${newUsername}`, newUsername, true);
+                alert("Ник изменён");
+                if(modalToClose) modalToClose.remove();
+                renderAuthUI();
+                renderCasesList();
+                updateGlobalRankDisplay();
+                updateSearchBlock();
+                return true;
+            }
+            return false;
+        }
+
+        function getComplaints() {
+            return JSON.parse(localStorage.getItem("osint_complaints")||'[]');
+        }
+        function saveComplaints(c) {
+            localStorage.setItem("osint_complaints", JSON.stringify(c));
+        }
+        async function addComplaint(caseId, reason, fromUserId, fromUsername) {
+            let complaints = getComplaints();
+            let existing = complaints.find(c => c.caseId === caseId && c.fromUserId === fromUserId && c.status === 'pending');
+            if(existing) {
+                alert("Вы уже жаловались");
+                return false;
+            }
+            let newComplaint = {
+                id: Date.now(),
+                caseId: caseId,
+                reason: reason,
+                fromUserId: fromUserId,
+                fromUsername: fromUsername,
+                status: 'pending',
+                createdAt: Date.now()
+            };
+            complaints.push(newComplaint);
+            saveComplaints(complaints);
+            await addLog(`Жалоба на кейс ${caseId}`, fromUsername, true);
+            alert("Жалоба отправлена");
+            return true;
+        }
+        async function resolveComplaint(complaintId, action) {
+            let complaints = getComplaints();
+            let idx = complaints.findIndex(c => c.id === complaintId);
+            if(idx === -1) return;
+            if(action === 'delete_case') {
+                let caseId = complaints[idx].caseId;
+                let cases = JSON.parse(localStorage.getItem("osint_cases")||'[]');
+                let newCases = cases.filter(c => c.id !== caseId);
+                localStorage.setItem("osint_cases", JSON.stringify(newCases));
+                await addLog(`Удаление кейса по жалобе #${caseId}`, currentUser?.username, true);
+                complaints[idx].status = 'resolved_deleted';
+                alert("Кейс удалён");
+            } else if(action === 'reject') {
+                complaints[idx].status = 'rejected';
+                alert("Жалоба отклонена");
+            }
+            saveComplaints(complaints);
+            if(currentUser && (currentUser.rank === 'owner' || currentUser.rank === 'moderator' || currentUser.rank === 'curator')) {
+                showAdminPanelContent();
+            }
+            renderCasesList();
+        }
+
+        function showPersonalCabinet(){
+            if(!currentUser){
+                alert("Войдите");
+                return;
+            }
+            let avatarUrl = getUserAvatarUrl(currentUser.username);
+            let allSess = getSessionsForUser(currentUser.id);
+            let currSess = allSess.find(s=>s.sessionId===currentSessionId);
+            let sessionsHtml = `<div><strong>ТЕКУЩАЯ СЕССИЯ:</strong><div class="session-item session-current">`;
+            if(currSess){
+                sessionsHtml += `<div>IP: ${currSess.ip}</div><div>Устройство: ${currSess.device}</div><div>Вход: ${new Date(currSess.loginTime).toLocaleString()}</div>`;
+            } else sessionsHtml += `<div>Нет данных</div>`;
+            sessionsHtml += `</div>`;
+            let other = allSess.filter(s=>s.sessionId !== currentSessionId);
+            if(other.length){
+                sessionsHtml += `<div><strong>ДРУГИЕ СЕССИИ (${other.length}):</strong>`;
+                other.forEach(s=>{
+                    sessionsHtml += `<div class="session-item"><div>IP: ${s.ip}</div><div>${s.device}</div><div>${new Date(s.loginTime).toLocaleString()}</div><button class="end-session-btn" data-sid="${s.sessionId}">Завершить</button></div>`;
+                });
+                sessionsHtml += `</div>`;
+            } else sessionsHtml += `<div><em>Нет других сессий</em></div>`;
+            
+            let modal = document.createElement('div'); modal.className='modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
+                        <img src="${avatarUrl}" class="profile-avatar" id="cabinetAvatar">
+                        <div>
+                            <div style="display:flex; align-items:center; gap:0.3rem; flex-wrap:wrap;">
+                                <h3 id="cabinetUsername">${escapeHtml(currentUser.username)}</h3>
+                                <button id="editUsernameBtn" class="edit-username-btn">✏️</button>
+                            </div>
+                            <p>${getRankDisplay(currentUser.rank)}</p>
+                            <p>ID <span class="id-copy" data-id="${currentUser.userId}">${currentUser.userId}</span></p>
+                            <p>Дата регистрации: ${new Date(currentUser.createdAt).toLocaleDateString()}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div><strong>Описание:</strong><p id="cabinetBioText">${escapeHtml(currentUser.bio||'Нет описания')}</p></div>
+                    <button id="editCabinetBioBtn">✏️ РЕДАКТИРОВАТЬ</button>
+                    <hr>
+                    ${sessionsHtml}
+                    <button id="closeCabinetBtn" class="close-modal">ЗАКРЫТЬ</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            modal.querySelectorAll('.id-copy').forEach(el=>{
+                el.onclick=()=>{
+                    navigator.clipboard.writeText(el.dataset.id);
+                    alert("ID скопирован!");
+                };
+            });
+            
+            document.getElementById('editUsernameBtn').onclick=async()=>{
+                let newName = prompt("Новый ник:", currentUser.username);
+                if(newName) await changeUsername(newName, currentUser, modal);
+            };
+            document.getElementById('editCabinetBioBtn').onclick=()=>{
+                let nb = prompt("Новое описание:", currentUser.bio||"");
+                if(nb !== null){
+                    let users = JSON.parse(localStorage.getItem("osint_users")||'[]');
+                    let idx = users.findIndex(u=>u.id===currentUser.id);
+                    if(idx !== -1){
+                        users[idx].bio = nb;
+                        localStorage.setItem("osint_users", JSON.stringify(users));
+                        currentUser.bio = nb;
+                        document.getElementById('cabinetBioText').innerText = nb || "Нет описания";
+                        addLog("Обновление описания", currentUser.username, true);
+                        alert("Описание обновлено");
+                        renderAuthUI();
+                        updateGlobalRankDisplay();
+                    }
+                }
+            };
+            let avatarImg = document.getElementById('cabinetAvatar');
+            avatarImg.style.cursor = 'pointer';
+            avatarImg.onclick = () => {
+                uploadAvatar(currentUser.id, currentUser.username);
+                modal.remove();
+                setTimeout(()=>showPersonalCabinet(), 100);
+            };
+            modal.querySelectorAll('.end-session-btn').forEach(btn=>{
+                btn.onclick=async()=>{
+                    let sid = btn.dataset.sid;
+                    if(confirm("Завершить сессию?")){
+                        terminateSession(currentUser.id, sid);
+                        await addLog("Завершение сессии", currentUser.username, true);
+                        modal.remove();
+                        setTimeout(()=>showPersonalCabinet(), 100);
+                    }
+                };
+            });
+            document.getElementById('closeCabinetBtn').onclick=()=>modal.remove();
+            modal.onclick=(e)=>{if(e.target===modal) modal.remove();};
+        }
+
+        function displayAllUsers() {
+            if(!currentUser){
+                let container = document.getElementById('searchResults');
+                if(container) container.innerHTML = '<div class="empty-message">Войдите</div>';
+                return;
+            }
+            let users = JSON.parse(localStorage.getItem("osint_users")||'[]');
+            let filtered = users.slice();
+            filtered.sort((a,b)=>(a.pinned?0:1)-(b.pinned?0:1) || a.username.localeCompare(b.username));
+            let container = document.getElementById('searchResults');
+            if(!filtered.length){
+                container.innerHTML='<div class="empty-message">Нет пользователей</div>';
+                return;
+            }
+            let html='';
+            filtered.forEach(u=>{
+                html+=`<div class="search-result" data-username="${escapeHtml(u.username)}">
+                    <img src="${getUserAvatarUrl(u.username)}" style="width:35px;height:35px;border-radius:50%;">
+                    <div><strong>${escapeHtml(u.username)}${u.pinned?' 📌':''}</strong><br>${getRankDisplay(u.rank||'user')}</div>
+                </div>`;
+            });
+            container.innerHTML=html;
+            document.querySelectorAll('.search-result').forEach(el=>{
+                el.onclick=()=>showUserProfile(el.dataset.username, currentUser && currentUser.username===el.dataset.username);
+            });
+        }
+
+        function searchUsers(query){
+            if(!currentUser){
+                displayAllUsers();
+                return;
+            }
+            let users=JSON.parse(localStorage.getItem("osint_users")||'[]');
+            let filtered=users.filter(u=>u.username.toLowerCase().includes(query.toLowerCase()));
+            filtered.sort((a,b)=>(a.pinned?0:1)-(b.pinned?0:1) || a.username.localeCompare(b.username));
+            let container=document.getElementById('searchResults');
+            if(!filtered.length){ container.innerHTML='<div class="empty-message">Никого</div>'; return; }
+            let html='';
+            filtered.forEach(u=>{
+                html+=`<div class="search-result" data-username="${escapeHtml(u.username)}">
+                    <img src="${getUserAvatarUrl(u.username)}" style="width:35px;height:35px;border-radius:50%;">
+                    <div><strong>${escapeHtml(u.username)}${u.pinned?' 📌':''}</strong><br>${getRankDisplay(u.rank||'user')}</div>
+                </div>`;
+            });
+            container.innerHTML=html;
+            document.querySelectorAll('.search-result').forEach(el=>{
+                el.onclick=()=>showUserProfile(el.dataset.username, currentUser && currentUser.username===el.dataset.username);
+            });
+        }
+
+        function updateSearchBlock(){
+            let sb=document.getElementById('searchBlock');
+            if(!currentUser){
+                sb.innerHTML='<div class="login-message">ДОСТУП ТОЛЬКО ДЛЯ АВТОРИЗОВАННЫХ</div>';
+                return;
+            }
+            sb.innerHTML=`<input type="text" id="searchUserInput" placeholder="Ник...">
+                         <button id="searchUserBtn">НАЙТИ</button>
+                         <div id="searchResults"></div>`;
+            document.getElementById('searchUserBtn').onclick=()=>{
+                let q=document.getElementById('searchUserInput').value.trim();
+                if(q==='') displayAllUsers();
+                else searchUsers(q);
+            };
+            displayAllUsers();
+        }
+
+        async function showUserProfile(username, canEdit){
+            if(!currentUser){ alert("Войдите"); return; }
+            let users=JSON.parse(localStorage.getItem("osint_users")||'[]');
+            let user=users.find(u=>u.username===username);
+            if(!user){ alert("Не найден"); return; }
+            let cases=JSON.parse(localStorage.getItem("osint_cases")||'[]');
+            let userCases=cases.filter(c=>c.authorId===user.id && !c.anonymous);
+            let avatarUrl=getUserAvatarUrl(username);
+            let sessionsHtml='';
+            if(canEdit){
+                let allSess=getSessionsForUser(user.id);
+                let currSess=allSess.find(s=>s.sessionId===currentSessionId);
+                sessionsHtml=`<div><strong>ТЕКУЩАЯ СЕССИЯ:</strong><div class="session-item session-current">`;
+                if(currSess){
+                    sessionsHtml+=`<div>IP: ${currSess.ip}</div><div>Устройство: ${currSess.device}</div><div>Вход: ${new Date(currSess.loginTime).toLocaleString()}</div>`;
+                } else sessionsHtml+=`<div>Нет данных</div>`;
+                sessionsHtml+=`</div>`;
+                let other=allSess.filter(s=>s.sessionId!==currentSessionId);
+                if(other.length){
+                    sessionsHtml+=`<div><strong>ДРУГИЕ СЕССИИ (${other.length}):</strong>`;
+                    other.forEach(s=>{
+                        sessionsHtml+=`<div class="session-item"><div>IP: ${s.ip}</div><div>${s.device}</div><div>${new Date(s.loginTime).toLocaleString()}</div><button class="end-session-btn" data-sid="${s.sessionId}">Завершить</button></div>`;
+                    });
+                    sessionsHtml+=`</div>`;
+                } else sessionsHtml+=`<div><em>Нет других сессий</em></div>`;
+            }
+            let modal = document.createElement('div'); modal.className='modal-overlay';
+            modal.innerHTML=`
+                <div class="modal-content">
+                    <div style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
+                        <img src="${avatarUrl}" class="profile-avatar" id="profileAvatar">
+                        <div>
+                            <div style="display:flex; align-items:center; gap:0.3rem; flex-wrap:wrap;">
+                                <h3 id="profileUsername">${escapeHtml(user.username)}</h3>
+                                ${canEdit ? `<button id="editProfileUsernameBtn" class="edit-username-btn">✏️</button>` : ''}
+                            </div>
+                            <p>${getRankDisplay(user.rank||'user')}</p>
+                            <p>ID <span class="id-copy" data-id="${user.userId}">${user.userId}</span></p>
+                            <p>Дата регистрации: ${new Date(user.createdAt).toLocaleDateString()}</p>
+                            <p>Кейсов: ${userCases.length}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div><strong>Описание:</strong><p id="profileBioText">${escapeHtml(user.bio||'Нет описания')}</p></div>
+                    ${canEdit ? `<button id="editBioBtn">РЕДАКТИРОВАТЬ ОПИСАНИЕ</button>` : ''}
+                    ${sessionsHtml ? `<hr>${sessionsHtml}` : ''}
+                    <button id="closeProfileBtn" class="close-modal">ЗАКРЫТЬ</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            modal.querySelectorAll('.id-copy').forEach(el=>{
+                el.onclick=()=>{
+                    navigator.clipboard.writeText(el.dataset.id);
+                    alert("ID скопирован!");
+                };
+            });
+            
+            if(canEdit){
+                document.getElementById('editProfileUsernameBtn').onclick=async()=>{
+                    let newName = prompt("Новый ник:", user.username);
+                    if(newName) await changeUsername(newName, user, modal);
+                };
+                document.getElementById('editBioBtn').onclick=()=>{
+                    let nb=prompt("Новое описание:", user.bio||"");
+                    if(nb!==null){
+                        let ul=JSON.parse(localStorage.getItem("osint_users")||'[]');
+                        let idx=ul.findIndex(u=>u.id===user.id);
+                        if(idx!==-1){
+                            ul[idx].bio=nb;
+                            localStorage.setItem("osint_users", JSON.stringify(ul));
+                            if(currentUser && currentUser.id===user.id) currentUser.bio=nb;
+                            document.getElementById('profileBioText').innerText=nb||"Нет описания";
+                            addLog("Обновление описания", currentUser?.username, true);
+                            alert("Описание обновлено");
+                        }
+                    }
+                };
+                let ava=document.getElementById('profileAvatar');
+                ava.style.cursor='pointer';
+                ava.onclick=()=>{ uploadAvatar(user.id, user.username); modal.remove(); setTimeout(()=>showUserProfile(username,true),100); };
+            }
+            document.querySelectorAll('.end-session-btn').forEach(btn=>{
+                btn.onclick=async()=>{
+                    let sid=btn.dataset.sid;
+                    if(confirm("Завершить сессию?")){
+                        terminateSession(user.id, sid);
+                        await addLog("Завершение сессии", currentUser.username, true);
+                        modal.remove();
+                        setTimeout(()=>showUserProfile(username,true),100);
+                    }
+                };
+            });
+            document.getElementById('closeProfileBtn').onclick=()=>modal.remove();
+            modal.onclick=(e)=>{if(e.target===modal) modal.remove();};
+        }
+
+        async function initData(){
+            currentIP = await getClientIP();
+            let users=localStorage.getItem("osint_users");
+            if(!users){
+                let hashed=await hashPassword("mjilir4I78vaiBNKRJbguvk9nXoG2OXUdPuOM0");
+                let ownerId = "10000001";
+                localStorage.setItem("osint_users", JSON.stringify([{id:1, username:"DESPITE", password:hashed, rank:"owner", createdAt:Date.now(), bio:"Основатель", pinned:true, userId:ownerId}]));
+                await addLog("Инициализация", "system", true);
+            }
+            migrateUserIds();
+            
+            let cases = JSON.parse(localStorage.getItem("osint_cases")||'[]');
+            let usersArr = JSON.parse(localStorage.getItem("osint_users")||'[]');
+            let needSave = false;
+            for(let c of cases){
+                if(!c.authorId){
+                    let author = usersArr.find(u=>u.username === c.authorName);
+                    if(author){
+                        c.authorId = author.id;
+                        needSave = true;
+                    } else if(c.authorName === "DESPITE"){
+                        c.authorId = 1;
+                        needSave = true;
+                    }
+                }
+            }
+            if(needSave){
+                localStorage.setItem("osint_cases", JSON.stringify(cases));
+            }
+            
+            let saved=localStorage.getItem("currentUserId");
+            let savedSess=localStorage.getItem("currentSessionId");
+            if(saved){
+                let ua2=JSON.parse(localStorage.getItem("osint_users"));
+                let f=ua2.find(u=>u.id==saved);
+                if(f && !f.banned){
+                    currentUser={id:f.id, username:f.username, rank:f.rank||'user', bio:f.bio, avatar:f.avatar, pinned:f.pinned, createdAt:f.createdAt, userId:f.userId};
+                    currentSessionId=savedSess;
+                    let sess=getSessions();
+                    if(!sess[currentUser.id] || !sess[currentUser.id].find(s=>s.sessionId===currentSessionId)){
+                        localStorage.removeItem("currentUserId"); localStorage.removeItem("currentSessionId"); currentUser=null; currentSessionId=null;
+                    }
+                } else { localStorage.removeItem("currentUserId"); localStorage.removeItem("currentSessionId"); }
+            }
+            renderAuthUI(); renderCasesList(); updateGlobalRankDisplay(); updateSearchBlock();
+            document.getElementById('openCabinetBtn').onclick=showPersonalCabinet;
+            document.getElementById('telegramBtn').onclick=()=>{
+                window.open('https://t.me/+xzvQvSTwVt5kNzVl', '_blank');
+            };
+        }
+
+        function getUsers(){ return JSON.parse(localStorage.getItem("osint_users")||'[]'); }
+        function getCases(){ return JSON.parse(localStorage.getItem("osint_cases")||'[]'); }
+        function saveUsers(u){ localStorage.setItem("osint_users", JSON.stringify(u)); }
+        function saveCases(c){ localStorage.setItem("osint_cases", JSON.stringify(c)); }
+
+        function renderAuthUI(){
+            let auth=document.getElementById("authArea");
+            let propose=document.getElementById("openProposeModalBtn");
+            let info=document.getElementById("loggedInfo");
+            let cabinetBtn=document.getElementById("openCabinetBtn");
+            let adminBtn = document.getElementById("openAdminPanelBtn");
+            if(!currentUser){
+                auth.innerHTML=`<div class="auth-tabs"><button id="tabLoginBtn" class="tab-btn active">ВХОД</button><button id="tabRegisterBtn" class="tab-btn">РЕГИСТРАЦИЯ</button></div>
+                <div id="loginForm"><input type="text" id="loginUsername" placeholder="Ник"><input type="password" id="loginPassword" placeholder="Пароль"><button id="doLoginBtn">ВОЙТИ</button></div>
+                <div id="registerForm" style="display:none;"><input type="text" id="regUsername" placeholder="Ник"><input type="password" id="regPassword" placeholder="Пароль"><input type="password" id="regPasswordConfirm" placeholder="Повторите"><textarea id="regBio" rows="2" placeholder="Описание"></textarea><button id="doRegisterBtn">ЗАРЕГИСТРИРОВАТЬСЯ</button></div>`;
+                propose.disabled=true; propose.innerText="ПРЕДЛОЖИТЬ КЕЙС (требуется вход)";
+                info.innerHTML=`Не авторизован.`;
+                cabinetBtn.style.display="none";
+                if(adminBtn) adminBtn.style.display = "none";
+                document.getElementById('doLoginBtn').onclick=loginUser;
+                document.getElementById('doRegisterBtn').onclick=registerUser;
+                let tL=document.getElementById('tabLoginBtn'), tR=document.getElementById('tabRegisterBtn');
+                tL.onclick=()=>{ document.getElementById('loginForm').style.display='block'; document.getElementById('registerForm').style.display='none'; tL.classList.add('active'); tR.classList.remove('active'); };
+                tR.onclick=()=>{ document.getElementById('loginForm').style.display='none'; document.getElementById('registerForm').style.display='block'; tR.classList.add('active'); tL.classList.remove('active'); };
+            } else {
+                auth.innerHTML=`<div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;"><div><strong>${escapeHtml(currentUser.username)}</strong> <span style="background:#4a1818; padding:0.2rem 0.5rem; border-radius:2rem;">${getRankDisplay(currentUser.rank)}</span></div><button id="logoutBtn">ВЫЙТИ</button></div>`;
+                propose.disabled=false; propose.innerText="ПРЕДЛОЖИТЬ КЕЙС";
+                info.innerHTML=`${escapeHtml(currentUser.username)} | ${getRankName(currentUser.rank)}`;
+                cabinetBtn.style.display="block";
+                if(adminBtn){
+                    if(currentUser.rank === 'owner' || currentUser.rank === 'moderator' || currentUser.rank === 'curator'){
+                        adminBtn.style.display = "block";
+                        adminBtn.onclick = showAdminPanel;
+                    } else {
+                        adminBtn.style.display = "none";
+                    }
+                }
+                document.getElementById('logoutBtn').onclick=logoutUser;
+            }
+            document.getElementById('openProposeModalBtn').onclick=showProposeModal;
+        }
+
+        async function registerUser(){
+            let uname=document.getElementById('regUsername').value.trim();
+            let pwd=document.getElementById('regPassword').value.trim();
+            let conf=document.getElementById('regPasswordConfirm').value.trim();
+            let bio=document.getElementById('regBio').value.trim()||"Новый пользователь";
+            if(!uname||!pwd){ alert("Заполните ник и пароль"); return; }
+            if(pwd!==conf){ alert("Пароли не совпадают"); return; }
+            if(pwd.length<3){ alert("Минимум 3 символа"); return; }
+            if(uname.toLowerCase()==='despite'){ alert("Ник зарезервирован"); return; }
+            if(!/^[a-zA-Z0-9_]+$/.test(uname)){ alert("Только латинские буквы, цифры, _"); return; }
+            let users=getUsers();
+            if(users.find(u=>u.username.toLowerCase()===uname.toLowerCase())){ alert("Ник занят"); return; }
+            let hashed=await hashPassword(pwd);
+            let newId=users.length?Math.max(...users.map(u=>u.id))+1:2;
+            let newUserId = generateUserId(users);
+            users.push({id:newId, username:uname, password:hashed, rank:"user", createdAt:Date.now(), bio, banned:false, pinned:false, userId:newUserId});
+            saveUsers(users);
+            await addLog("Регистрация", uname, true);
+            alert("Регистрация успешна! Войдите.");
+            document.getElementById('loginUsername').value=uname;
+            document.getElementById('loginForm').style.display='block';
+            document.getElementById('registerForm').style.display='none';
+        }
+
+        async function loginUser(){
+            let uname=document.getElementById('loginUsername').value.trim();
+            let pwd=document.getElementById('loginPassword').value.trim();
+            if(!uname||!pwd){ alert("Введите ник и пароль"); return; }
+            let users=getUsers();
+            let hashed=await hashPassword(pwd);
+            let found=users.find(u=>u.username===uname && u.password===hashed);
+            if(!found){ alert("Неверные данные"); await addLog("Неудачный вход", uname, false); return; }
+            if(found.banned){ alert("Аккаунт заблокирован"); return; }
+            let sid=await createSession(found.id);
+            currentSessionId=sid;
+            currentUser={id:found.id, username:found.username, rank:found.rank||'user', bio:found.bio, avatar:found.avatar, pinned:found.pinned, createdAt:found.createdAt, userId:found.userId};
+            localStorage.setItem("currentUserId", found.id);
+            localStorage.setItem("currentSessionId", sid);
+            await addLog("Вход", uname, true);
+            renderAuthUI(); renderCasesList(); updateGlobalRankDisplay(); updateSearchBlock();
+        }
+
+        async function logoutUser(){
+            if(currentUser && currentSessionId) terminateSession(currentUser.id, currentSessionId);
+            currentUser=null; currentSessionId=null;
+            localStorage.removeItem("currentUserId"); localStorage.removeItem("currentSessionId");
+            renderAuthUI(); renderCasesList(); updateGlobalRankDisplay(); updateSearchBlock();
+        }
+
+        function updateGlobalRankDisplay(){
+            let d=document.getElementById("globalRankDisplay");
+            if(!currentUser) d.innerHTML="Гость";
+            else d.innerHTML=getRankDisplay(currentUser.rank);
+        }
+
+        function canUserPostCase(userId) {
+            let lastPost = localStorage.getItem(`last_post_${userId}`);
+            if(!lastPost) return true;
+            let lastTime = parseInt(lastPost);
+            let now = Date.now();
+            return (now - lastTime) >= 86400000;
+        }
+        function updateLastPostTime(userId) {
+            localStorage.setItem(`last_post_${userId}`, Date.now().toString());
+        }
+
+        function showProposeModal(){
+            if(!currentUser){ alert("Войдите"); return; }
+            if(currentUser.banned){ alert("Заблокированы"); return; }
+            if(!canUserPostCase(currentUser.id)){
+                let last = localStorage.getItem(`last_post_${currentUser.id}`);
+                let nextAvailable = new Date(parseInt(last) + 86400000);
+                alert(`1 кейс в сутки. Следующий: ${nextAvailable.toLocaleString()}`);
+                return;
+            }
+            let modal=document.createElement('div'); modal.className='modal-overlay';
+            modal.innerHTML=`<div class="modal-content"><h3>НОВЫЙ КЕЙС</h3>
+                <input type="text" id="caseGoal" placeholder="Цель *">
+                <textarea id="caseDesc" rows="3" placeholder="Описание *"></textarea>
+                <textarea id="caseReason" rows="2" placeholder="Причина *"></textarea>
+                <label class="checkbox-label"><input type="checkbox" id="anonymousCheck"> Анонимно</label>
+                <button id="submitCase">ОПУБЛИКОВАТЬ</button><button id="cancelCase" class="close-modal">ОТМЕНА</button></div>`;
+            document.body.appendChild(modal);
+            document.getElementById('submitCase').onclick=async()=>{
+                let goal=document.getElementById('caseGoal').value.trim();
+                let desc=document.getElementById('caseDesc').value.trim();
+                let reason=document.getElementById('caseReason').value.trim();
+                let anon = document.getElementById('anonymousCheck').checked;
+                if(!goal||!desc||!reason){ alert("Заполните все поля"); return; }
+                let cases=getCases();
+                let newId=cases.length?Math.max(...cases.map(c=>c.id))+1:200;
+                let displayName = anon ? "Аноним" : currentUser.username;
+                cases.push({
+                    id:newId,
+                    goal: goal,
+                    description: desc,
+                    reason: reason,
+                    authorId: currentUser.id,
+                    authorName: displayName,
+                    anonymous: anon,
+                    createdAt: Date.now()
+                });
+                saveCases(cases);
+                updateLastPostTime(currentUser.id);
+                await addLog("Добавление кейса", currentUser.username, true);
+                renderCasesList();
+                modal.remove();
+                alert("Кейс добавлен! Следующий через 24 часа.");
+            };
+            document.getElementById('cancelCase').onclick=()=>modal.remove();
+            modal.onclick=(e)=>{if(e.target===modal) modal.remove();};
+        }
+
+        async function deleteCase(cid){
+            if(!currentUser) return;
+            if(!['owner','moderator','curator'].includes(currentUser.rank)){ alert("Недостаточно прав"); return; }
+            let cases=getCases();
+            let newc=cases.filter(c=>c.id!==cid);
+            if(newc.length===cases.length) return;
+            saveCases(newc);
+            await addLog("Удаление кейса", currentUser.username, true);
+            renderCasesList();
+        }
+
+        function renderCasesList(){
+            let cont=document.getElementById("casesContainer");
+            if(!currentUser){ cont.innerHTML='<div class="empty-message">Войдите, чтобы увидеть кейсы</div>'; return; }
+            let cases=getCases();
+            if(!cases.length){ cont.innerHTML='<div class="empty-message">Нет кейсов</div>'; return; }
+            let canDel = ['owner','moderator','curator'].includes(currentUser.rank);
+            let sorted=[...cases].sort((a,b)=>b.createdAt-a.createdAt);
+            let html='';
+            sorted.forEach(c=>{
+                let isClickable=!c.anonymous && c.authorName!=="Аноним";
+                html+=`<div class="case-item"><div class="case-header"><div class="case-title">◈ ${escapeHtml(c.goal)}</div>
+                <div class="case-author" data-author="${isClickable?c.authorName:''}" style="${isClickable?'cursor:pointer':''}">✎ ${escapeHtml(c.authorName)}</div></div>
+                <div class="case-goal"><strong>Цель:</strong> ${escapeHtml(c.goal)}</div>
+                <div class="case-desc"><strong>Описание:</strong> ${escapeHtml(c.description)}</div>
+                <div class="case-reason"><strong>Причина:</strong> ${escapeHtml(c.reason)}</div>
+                <div class="case-footer"><span> ${new Date(c.createdAt).toLocaleString()}</span>
+                <div style="display:flex; gap:0.3rem;">
+                ${canDel ? `<button class="delete-case-btn" data-id="${c.id}">🗑️ Удалить</button>` : ''}
+                <button class="complain-btn" data-id="${c.id}">⚠️ Жалоба</button>
+                </div></div></div>`;
+            });
+            cont.innerHTML=html;
+            document.querySelectorAll('.case-author').forEach(el=>{
+                let auth=el.dataset.author;
+                if(auth) el.onclick=()=>showUserProfile(auth, currentUser && currentUser.username===auth);
+            });
+            document.querySelectorAll('.delete-case-btn').forEach(btn=>{
+                btn.onclick=async(e)=>{ e.stopPropagation(); if(confirm("Удалить?")) await deleteCase(parseInt(btn.dataset.id)); };
+            });
+            document.querySelectorAll('.complain-btn').forEach(btn=>{
+                btn.onclick=async(e)=>{
+                    e.stopPropagation();
+                    let caseId = parseInt(btn.dataset.id);
+                    let reason = prompt("Причина жалобы (минимум 3 символа):");
+                    if(reason && reason.trim().length >= 3){
+                        await addComplaint(caseId, reason.trim(), currentUser.id, currentUser.username);
+                    } else if(reason) {
+                        alert("Минимум 3 символа");
+                    }
+                };
+            });
+        }
+
+        async function togglePin(uid, cur, uname){
+            let users=getUsers();
+            let idx=users.findIndex(u=>u.id===uid);
+            if(idx===-1) return;
+            users[idx].pinned=!cur;
+            saveUsers(users);
+            await addLog(`${cur?"Открепление":"Закрепление"} профиля ${uname}`, currentUser?.username, true);
+            alert(`Профиль ${uname} ${cur?"откреплён":"закреплён"}`);
+            if(currentUser && currentUser.id===uid) currentUser.pinned=!cur;
+            document.querySelector('.admin-panel-overlay')?.remove();
+            showAdminPanelContent();
+            updateSearchBlock();
+        }
+
+        async function toggleBan(uid, cur, uname){
+            let users=getUsers();
+            let idx=users.findIndex(u=>u.id===uid);
+            if(idx===-1) return;
+            users[idx].banned=!cur;
+            saveUsers(users);
+            if(currentUser && currentUser.id===uid) currentUser.banned=!cur;
+            await addLog(`${cur?"Разблокировка":"Блокировка"} ${uname}`, currentUser?.username, true);
+            alert(`Пользователь ${uname} ${cur?"разблокирован":"заблокирован"}`);
+            document.querySelector('.admin-panel-overlay')?.remove();
+            showAdminPanelContent();
+        }
+
+        async function deleteUserForever(uid, uname){
+            if(!confirm(`УДАЛИТЬ НАВСЕГДА ${uname} и все его кейсы?`)) return;
+            let users=getUsers();
+            let cases=getCases();
+            let user=users.find(u=>u.id===uid);
+            if(!user) return;
+            if(user.username==="DESPITE"){ alert("Нельзя удалить владельца"); return; }
+            let newUsers=users.filter(u=>u.id!==uid);
+            let newCases=cases.filter(c=>c.authorId!==uid);
+            saveUsers(newUsers);
+            saveCases(newCases);
+            let sess=getSessions();
+            delete sess[uid];
+            saveSessions(sess);
+            await addLog(`ПОЛНОЕ УДАЛЕНИЕ ${uname}`, currentUser?.username, true);
+            alert(`Пользователь ${uname} удалён`);
+            if(currentUser && currentUser.id===uid) await logoutUser();
+            document.querySelector('.admin-panel-overlay')?.remove();
+            showAdminPanelContent();
+            renderCasesList();
+            if(currentUser && currentUser.id!==uid){ renderAuthUI(); updateGlobalRankDisplay(); updateSearchBlock(); }
+        }
+
+        function showAdminPanel(){
+            if(!currentUser){
+                alert("Доступ только для авторизованных");
+                return;
+            }
+            if(currentUser.rank !== 'owner' && currentUser.rank !== 'moderator' && currentUser.rank !== 'curator'){
+                alert("Недостаточно прав. Требуется ранг: Владелец, Модератор или Куратор");
+                return;
+            }
+            showAdminPanelContent();
+        }
+
+        function showAdminPanelContent(){
+            let users=getUsers();
+            let logs=JSON.parse(localStorage.getItem("osint_logs")||'[]');
+            let complaints = getComplaints();
+            let panel=document.createElement('div'); panel.className='admin-panel-overlay';
+            let usersHtml='';
+            users.forEach(u=>{
+                let isBanned=u.banned||false;
+                let isPinned=u.pinned||false;
+                usersHtml+=`<div class="user-list-item">
+                    <div class="user-info"><img src="${getUserAvatarUrl(u.username)}" style="width:35px;height:35px;border-radius:50%;"><div><strong>${escapeHtml(u.username)}</strong> ${isBanned?'<span class="pinned-badge">ЗАБЛОКИРОВАН</span>':''} ${isPinned?'<span class="pinned-badge">ЗАКРЕПЛЁН</span>':''}<div class="user-details">ID:${u.userId} | ${new Date(u.createdAt).toLocaleDateString()}</div></div></div>
+                    <div style="display:flex; gap:0.3rem; flex-wrap:wrap;">
+                        <select id="rank_${u.id}"><option value="user" ${(u.rank||'user')==='user'?'selected':''}>Пользователь</option><option value="analyst" ${u.rank==='analyst'?'selected':''}>Аналитик</option><option value="moderator" ${u.rank==='moderator'?'selected':''}>Модератор</option><option value="curator" ${u.rank==='curator'?'selected':''}>Куратор</option><option value="owner" ${u.rank==='owner'?'selected':''}>Владелец</option></select>
+                        <button class="admin-btn-small" data-id="${u.id}">Ранг</button>
+                        <button class="pin-btn" data-id="${u.id}" data-pinned="${isPinned}">${isPinned?'ОТКРЕПИТЬ':'ЗАКРЕПИТЬ'}</button>
+                        <button class="ban-btn" data-id="${u.id}" data-banned="${isBanned}">${isBanned?'РАЗБЛОКИРОВАТЬ':'ЗАБЛОКИРОВАТЬ'}</button>
+                        <button class="delete-user-btn" data-id="${u.id}">УДАЛИТЬ</button>
+                    </div>
+                </div>`;
+            });
+            
+            let complaintsHtml = '';
+            let pendingComplaints = complaints.filter(c => c.status === 'pending');
+            if(pendingComplaints.length === 0){
+                complaintsHtml = '<div class="empty-message">Нет новых жалоб</div>';
+            } else {
+                pendingComplaints.forEach(c => {
+                    complaintsHtml += `<div class="user-list-item" style="border-left: 3px solid #ffaa66;">
+                        <div><strong>Жалоба на кейс #${c.caseId}</strong><br>
+                        От: ${escapeHtml(c.fromUsername)}<br>
+                        Причина: ${escapeHtml(c.reason)}<br>
+                        Статус: <span style="color:#ffaa66;">Ожидает</span>
+                        </div>
+                        <div style="display:flex; gap:0.3rem;">
+                            <button class="admin-btn-small" data-complaint="${c.id}" data-action="delete_case">Удалить кейс</button>
+                            <button class="admin-btn-small" data-complaint="${c.id}" data-action="reject">Отклонить</button>
+                        </div>
+                    </div>`;
+                });
+            }
+            
+            let logsHtml='';
+            logs.slice(0,30).forEach(l=>{
+                logsHtml+=`<div style="padding:0.2rem; border-bottom:1px solid #3a1515; font-size:0.65rem;"><span style="color:#ff8888;">[${new Date(l.timestamp).toLocaleString()}]</span> 🌐 ${l.ip} ${l.success?'✅':'❌'} ${l.action} @${l.username}</div>`;
+            });
+            panel.innerHTML=`<div class="admin-panel"><div class="admin-header"><h2>АДМИН ПАНЕЛЬ</h2><button id="closeAdmin" class="close-admin">✖</button></div>
+            <div class="admin-content">
+                <div class="admin-section"><h3>ЖАЛОБЫ (${pendingComplaints.length})</h3>${complaintsHtml}</div>
+                <div class="admin-section"><h3>ПОЛЬЗОВАТЕЛИ</h3>${usersHtml}</div>
+                <div class="admin-section"><h3>ЛОГИ</h3><div style="max-height:200px; overflow:auto;">${logsHtml||'<div>Пусто</div>'}</div>
+                <button id="clearLogs">ОЧИСТИТЬ ЛОГИ</button></div></div></div>`;
+            document.body.appendChild(panel);
+            document.getElementById('closeAdmin').onclick=()=>panel.remove();
+            document.getElementById('clearLogs').onclick=async()=>{ if(confirm('Очистить логи?')){ localStorage.setItem('osint_logs','[]'); await addLog("Очистка логов", "admin", true); panel.remove(); alert("Логи очищены"); } };
+            
+            document.querySelectorAll('[data-complaint]').forEach(btn=>{
+                btn.onclick=async()=>{
+                    let complaintId = parseInt(btn.dataset.complaint);
+                    let action = btn.dataset.action;
+                    await resolveComplaint(complaintId, action);
+                    panel.remove();
+                    showAdminPanelContent();
+                };
+            });
+            
+            document.querySelectorAll('[data-id]').forEach(btn=>{
+                if(btn.classList.contains('pin-btn')){
+                    btn.onclick=async()=>{ let uid=parseInt(btn.dataset.id); let uname=users.find(u=>u.id===uid)?.username; await togglePin(uid, btn.dataset.pinned==='true', uname); };
+                } else if(btn.classList.contains('ban-btn')){
+                    btn.onclick=async()=>{ let uid=parseInt(btn.dataset.id); let uname=users.find(u=>u.id===uid)?.username; await toggleBan(uid, btn.dataset.banned==='true', uname); };
+                } else if(btn.classList.contains('delete-user-btn')){
+                    btn.onclick=async()=>{ let uid=parseInt(btn.dataset.id); let uname=users.find(u=>u.id===uid)?.username; await deleteUserForever(uid, uname); };
+                } else if(btn.classList.contains('admin-btn-small') && !btn.dataset.complaint){
+                    btn.onclick=async()=>{
+                        let uid=parseInt(btn.dataset.id);
+                        let newRank=document.getElementById(`rank_${uid}`).value;
+                        let ul=getUsers();
+                        let idx=ul.findIndex(u=>u.id===uid);
+                        if(idx===-1) return;
+                        if(ul[idx].username==="DESPITE" && newRank!=='owner'){ alert("Нельзя понизить владельца"); return; }
+                        ul[idx].rank=newRank;
+                        saveUsers(ul);
+                        if(currentUser && currentUser.id===uid) currentUser.rank=newRank;
+                        await addLog(`Изменение ранга ${ul[idx].username} → ${getRankName(newRank)}`, currentUser?.username, true);
+                        alert("Ранг сохранён");
+                        panel.remove();
+                        showAdminPanelContent();
+                        renderAuthUI();
+                        updateGlobalRankDisplay();
+                        updateSearchBlock();
+                    };
+                }
+            });
+            panel.onclick=(e)=>{if(e.target===panel) panel.remove();};
+        }
+
+        function escapeHtml(s){ if(!s) return ''; return s.replace(/[&<>]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
+
+        initData();
+    })();
+</script>
+</body>
+</html>
