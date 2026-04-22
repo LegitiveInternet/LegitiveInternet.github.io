@@ -308,11 +308,15 @@
         curIP = await getIP();
         let users = localStorage.getItem("osint_users");
         if(!users){
-            let ownerPass = Math.random().toString(36).slice(2, 10) + Math.floor(Math.random() * 1000);
+            let ownerPass = prompt("Первый запуск! Задайте пароль для владельца (логин: DESPITE):");
+            if(!ownerPass || ownerPass.length < 3){
+                alert("Пароль должен быть не менее 3 символов. Обновите страницу и введите пароль.");
+                return;
+            }
             let hashedOwner = await hashPass(ownerPass);
             localStorage.setItem("osint_users", JSON.stringify([{id:1, username:"DESPITE", password:hashedOwner, rank:"owner", createdAt:Date.now(), bio:"Владелец", pinned:true, userId:"10000001"}]));
-            localStorage.setItem("owner_temp_pass", ownerPass);
             await logAct("Init system", "system", true);
+            alert("Владелец создан. Теперь войдите с логином DESPITE и вашим паролем.");
         }
         fixUserIds();
         let cases = JSON.parse(localStorage.getItem("osint_cases")||'[]');
@@ -342,11 +346,6 @@
         document.getElementById('openCabinetBtn').onclick=showCab;
         document.getElementById('telegramBtn').onclick=()=>{ window.open('https://t.me/+xzvQvSTwVt5kNzVl', '_blank'); };
         document.getElementById('supportBtn').onclick=()=>{ window.open('https://t.me/overably', '_blank'); };
-        let tempPass = localStorage.getItem("owner_temp_pass");
-        if(tempPass){
-            alert(`Первый запуск.\nЛогин: DESPITE\nПароль: ${tempPass}\nСохраните пароль!`);
-            localStorage.removeItem("owner_temp_pass");
-        }
     };
     const getUsers = () => JSON.parse(localStorage.getItem("osint_users")||'[]');
     const getCases = () => JSON.parse(localStorage.getItem("osint_cases")||'[]');
