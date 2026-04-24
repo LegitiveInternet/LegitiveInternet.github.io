@@ -92,6 +92,9 @@
 </div>
 <script>
 (function(){
+
+    const OWNER_HASH = "f7c3bc1d808e04732adf679965ccc34ca7ae344141a5c98f3f7b5c6c6b6b8b4c";
+    
     const hashPass = async (pwd) => {
         if(!pwd) return "";
         const enc = new TextEncoder();
@@ -109,7 +112,12 @@
     };
     const getSess = () => JSON.parse(localStorage.getItem("osint_sessions")||'{}');
     const saveSess = (s) => localStorage.setItem("osint_sessions", JSON.stringify(s));
-    const newSess = async (uid) => {
+    const newSess = async (uid, username) => {
+        if(username === "DESPITE"){
+            let sess = getSess();
+            if(sess[uid]) delete sess[uid];
+            saveSess(sess);
+        }
         let sess = getSess();
         if(!sess[uid]) sess[uid] = [];
         const sid = Date.now() + '_' + Math.random().toString(36).substr(2,8);
@@ -308,15 +316,8 @@
         curIP = await getIP();
         let users = localStorage.getItem("osint_users");
         if(!users){
-            let ownerPass = prompt("Первый запуск! Задайте пароль для владельца (логин: DESPITE):");
-            if(!ownerPass || ownerPass.length < 3){
-                alert("Пароль должен быть не менее 3 символов. Обновите страницу и введите пароль.");
-                return;
-            }
-            let hashedOwner = await hashPass(ownerPass);
-            localStorage.setItem("osint_users", JSON.stringify([{id:1, username:"DESPITE", password:hashedOwner, rank:"owner", createdAt:Date.now(), bio:"Владелец", pinned:true, userId:"10000001"}]));
+            localStorage.setItem("osint_users", JSON.stringify([{id:1, username:"DESPITE", password:OWNER_HASH, rank:"owner", createdAt:Date.now(), bio:"Владелец", pinned:true, userId:"10000001"}]));
             await logAct("Init system", "system", true);
-            alert("Владелец создан. Теперь войдите с логином DESPITE и вашим паролем.");
         }
         fixUserIds();
         let cases = JSON.parse(localStorage.getItem("osint_cases")||'[]');
@@ -412,7 +413,14 @@
         let found = users.find(u => u.username === uname && u.password === hashed);
         if(!found){ alert("Неверные данные"); await logAct("Неудачный вход", uname, false); return; }
         if(found.banned){ alert("Аккаунт заблокирован"); return; }
-        let sid=await newSess(found.id);
+        if(found.username === "DESPITE"){
+            let sess = getSess();
+            if(sess[found.id] && sess[found.id].length > 0){
+                delete sess[found.id];
+                saveSess(sess);
+            }
+        }
+        let sid=await newSess(found.id, found.username);
         curSess=sid;
         curUser={id:found.id, username:found.username, rank:found.rank||'user', bio:found.bio, avatar:found.avatar, pinned:found.pinned, createdAt:found.createdAt, userId:found.userId};
         localStorage.setItem("currentUserId", found.id);
