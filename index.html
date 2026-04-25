@@ -33,6 +33,22 @@
         .status-solved{color:#6fbf6f;border-left:2px solid #6fbf6f;background:#1a2a1a}
         .status-unsolved{color:#e0a0a0;border-left:2px solid #c0392b;background:#2a1515}
         .status-inprogress{color:#f0b27a;border-left:2px solid #e67e22;background:#2a1a0f}
+        .comments-toggle{background:#3a1818;border:1px solid #aa3a3a;color:#ffaaaa;padding:.2rem .8rem;margin-top:.4rem;font-size:.7rem;width:auto;display:inline-flex;align-items:center;gap:.4rem}
+        .comments-toggle:hover{background:#c0392b;color:#fff}
+        .comments-section{margin-top:.6rem;border-top:1px solid #7a2525;padding-top:.5rem;display:none}
+        .comments-section.open{display:block}
+        .comment-item{background:#2a1010;margin-bottom:.4rem;padding:.4rem .6rem;border-radius:.6rem;font-size:.7rem}
+        .comment-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.2rem;flex-wrap:wrap;gap:.4rem}
+        .comment-user{display:flex;align-items:center;gap:.4rem;cursor:pointer}
+        .comment-avatar{width:20px;height:20px;border-radius:50%;object-fit:cover;border:1px solid #c0392b}
+        .comment-author{font-weight:bold;color:#ffaaaa}
+        .comment-date{color:#a07070;font-size:.6rem}
+        .comment-text{color:#e0c0c0;word-break:break-word}
+        .delete-comment-btn{background:transparent;border:none;color:#cc8888;cursor:pointer;font-size:.6rem;padding:0 .3rem;margin:0;width:auto;box-shadow:none;margin-top:0}
+        .delete-comment-btn:hover{background:transparent;color:#c0392b;transform:none}
+        .add-comment-form{display:flex;gap:.4rem;margin-top:.5rem;flex-wrap:wrap}
+        .add-comment-form textarea{flex:1;padding:.3rem .5rem;font-size:.7rem;margin-bottom:0;height:50px}
+        .add-comment-form button{width:auto;padding:.3rem .8rem;margin-top:0;font-size:.7rem}
         .empty-message,.login-message{text-align:center;color:#cc8888;padding:1.5rem;font-style:italic;background:#2a1010;border-radius:1rem;margin:.5rem 0}
         hr{border-color:#7a2525;margin:.6rem 0}
         .info-note{font-size:.65rem;background:#2a0f0f;padding:.4rem;border-radius:1rem;text-align:center;color:#ffbbbb;margin-top:.6rem}
@@ -91,8 +107,8 @@
     <footer style="text-align:center;margin-top:1.2rem;color:#b55a5a;font-size:.65rem;">© LEGITIVE INTERNET — Все права защищены!</footer>
 </div>
 <script>
-
-let curIP = 'Загрузка...', curSess = null, curUser = null;
+// Глобальные переменные
+let curIP = 'загрузка...', curSess = null, curUser = null;
 const OWNER_HASH = "f7c3bc1d808e04732adf679965ccc34ca7ae344141a5c98f3f7b5c6c6b6b8b4c";
 
 async function hashPass(pwd) {
@@ -105,7 +121,7 @@ async function getIP() {
     try { const r=await fetch('https://api.ipify.org?format=json'); const d=await r.json(); return d.ip; } catch(e){ return '127.0.0.1'; }
 }
 async function logAct(act, uname, ok=true) {
-    if(curIP==='Загрузка...') curIP = await getIP();
+    if(curIP==='загрузка...') curIP = await getIP();
     let logs = JSON.parse(localStorage.getItem("osint_logs")||'[]');
     logs.unshift({id:Date.now(), ts:new Date().toISOString(), ip:curIP, act, uname, ok});
     if(logs.length>300) logs.pop();
@@ -230,6 +246,49 @@ async function resolveCompl(complId, action) {
     if(curUser && (curUser.rank === 'owner' || curUser.rank === 'moderator' || curUser.rank === 'curator')) showAdminContent();
     renderCases();
 }
+
+function getComments() {
+    return JSON.parse(localStorage.getItem("osint_comments")||'{}');
+}
+function saveComments(comments) {
+    localStorage.setItem("osint_comments", JSON.stringify(comments));
+}
+function getCommentCount(caseId) {
+    let comments = getComments();
+    return comments[caseId] ? comments[caseId].length : 0;
+}
+async function addComment(caseId, text) {
+    if(!curUser) { alert("Войдите"); return false; }
+    if(!text.trim()) { alert("Пустой комментарий"); return false; }
+    let comments = getComments();
+    if(!comments[caseId]) comments[caseId] = [];
+    comments[caseId].push({
+        id: Date.now(),
+        authorId: curUser.id,
+        authorName: curUser.username,
+        text: text.trim(),
+        createdAt: Date.now()
+    });
+    saveComments(comments);
+    await logAct(`Комментарий к кейсу ${caseId}`, curUser.username, true);
+    renderCases();
+    return true;
+}
+async function deleteComment(caseId, commentId) {
+    if(!curUser) return;
+    let comments = getComments();
+    if(!comments[caseId]) return;
+    let comment = comments[caseId].find(c => c.id === commentId);
+    if(!comment) return;
+    let canDelete = (curUser.id === comment.authorId) || (curUser.rank === 'owner' || curUser.rank === 'moderator' || curUser.rank === 'curator');
+    if(!canDelete) { alert("Недостаточно прав"); return; }
+    comments[caseId] = comments[caseId].filter(c => c.id !== commentId);
+    if(comments[caseId].length === 0) delete comments[caseId];
+    saveComments(comments);
+    await logAct(`Удаление комментария к кейсу ${caseId}`, curUser.username, true);
+    renderCases();
+}
+
 function showCab() {
     if(!curUser){ alert("Войдите"); return; }
     let av = avatarUrl(curUser.username);
@@ -499,6 +558,28 @@ function statusText(st) {
     if(st==='inprogress') return '<span class="case-status status-inprogress">⚙ В РАБОТЕ</span>';
     return '<span class="case-status status-unsolved">❌ НЕ РЕШЁН</span>';
 }
+function renderComments(caseId) {
+    let comments = getComments();
+    let caseComments = comments[caseId] || [];
+    if(caseComments.length === 0) return '<div class="empty-message" style="padding:.3rem;font-size:.7rem;">Нет комментариев</div>';
+    let html = '';
+    caseComments.sort((a,b)=>a.createdAt - b.createdAt).forEach(c => {
+        let avatar = avatarUrl(c.authorName);
+        let canDelete = (curUser && (curUser.id === c.authorId || curUser.rank === 'owner' || curUser.rank === 'moderator' || curUser.rank === 'curator'));
+        html += `<div class="comment-item">
+            <div class="comment-header">
+                <div class="comment-user" data-author="${escapeHtml(c.authorName)}">
+                    <img src="${avatar}" class="comment-avatar" alt="">
+                    <span class="comment-author">${escapeHtml(c.authorName)}</span>
+                </div>
+                <div><span class="comment-date">${new Date(c.createdAt).toLocaleString()}</span>${canDelete ? `<button class="delete-comment-btn" data-comment-id="${c.id}">🗑️</button>` : ''}</div>
+            </div>
+            <div class="comment-text">${escapeHtml(c.text)}</div>
+        </div>`;
+    });
+    return html;
+}
+
 function renderCases() {
     let cont=document.getElementById("casesContainer");
     if(!curUser){ cont.innerHTML='<div class="empty-message">Войдите, чтобы увидеть кейсы</div>'; return; }
@@ -509,18 +590,50 @@ function renderCases() {
     let html='';
     sorted.forEach(c=>{
         let isClick=!c.anonymous && c.authorName!=="Аноним";
-        html+=`<div class="case-item"><div class="case-header"><div class="case-title">◈ ${escapeHtml(c.goal)}</div><div class="case-author" data-author="${isClick?c.authorName:''}" style="${isClick?'cursor:pointer':''}">✎ ${escapeHtml(c.authorName)}</div></div>
-        <div class="case-goal"><strong>Цель:</strong> ${escapeHtml(c.goal)}</div>
-        <div class="case-desc"><strong>Описание:</strong> ${escapeHtml(c.description)}</div>
-        <div class="case-reason"><strong>Причина:</strong> ${escapeHtml(c.reason)}</div>
-        <div class="case-footer"><span>${statusText(c.status)} | ${new Date(c.createdAt).toLocaleString()}</span>
-        <div style="display:flex; gap:0.3rem;">${canDel ? `<button class="delete-case-btn" data-id="${c.id}">🗑️ Удалить</button>` : ''}<button class="complain-btn" data-id="${c.id}">⚠️ Жалоба</button></div></div></div>`;
+        let commentCount = getCommentCount(c.id);
+        html+=`<div class="case-item" data-case-id="${c.id}">
+            <div class="case-header">
+                <div class="case-title">◈ ${escapeHtml(c.goal)}</div>
+                <div class="case-author" data-author="${isClick?c.authorName:''}" style="${isClick?'cursor:pointer':''}">✎ ${escapeHtml(c.authorName)}</div>
+            </div>
+            <div class="case-goal"><strong>Цель:</strong> ${escapeHtml(c.goal)}</div>
+            <div class="case-desc"><strong>Описание:</strong> ${escapeHtml(c.description)}</div>
+            <div class="case-reason"><strong>Причина:</strong> ${escapeHtml(c.reason)}</div>
+            <div class="case-footer">
+                <span>${statusText(c.status)} | ${new Date(c.createdAt).toLocaleString()}</span>
+                <div style="display:flex; gap:0.3rem;">
+                    ${canDel ? `<button class="delete-case-btn" data-id="${c.id}">🗑️ Удалить</button>` : ''}
+                    <button class="complain-btn" data-id="${c.id}">⚠️ Жалоба</button>
+                </div>
+            </div>
+            <button class="comments-toggle" data-id="${c.id}">💬 Комментарии (${commentCount})</button>
+            <div class="comments-section" id="comments-${c.id}">
+                <div class="comment-list" id="comment-list-${c.id}">${renderComments(c.id)}</div>
+                <div class="add-comment-form">
+                    <textarea id="comment-text-${c.id}" placeholder="Ваш комментарий..."></textarea>
+                    <button class="add-comment-btn" data-id="${c.id}">></button>
+                </div>
+            </div>
+        </div>`;
     });
     cont.innerHTML=html;
     document.querySelectorAll('.case-author').forEach(el=>{ let auth=el.dataset.author; if(auth) el.onclick=()=>showProfile(auth); });
     document.querySelectorAll('.delete-case-btn').forEach(btn=>{ btn.onclick=async(e)=>{ e.stopPropagation(); if(confirm("Удалить?")) await delCase(parseInt(btn.dataset.id)); }; });
     document.querySelectorAll('.complain-btn').forEach(btn=>{
         btn.onclick=async(e)=>{ e.stopPropagation(); let caseId = parseInt(btn.dataset.id); let reason = prompt("Причина жалобы (мин 3 символа):"); if(reason && reason.trim().length >= 3) await addCompl(caseId, reason.trim(), curUser.id, curUser.username); else if(reason) alert("Минимум 3 символа"); };
+    });
+    document.querySelectorAll('.comments-toggle').forEach(btn=>{
+        btn.onclick=(e)=>{ e.stopPropagation(); let caseId = btn.dataset.id; let sec = document.getElementById(`comments-${caseId}`); sec.classList.toggle('open'); };
+    });
+    document.querySelectorAll('.add-comment-btn').forEach(btn=>{
+        btn.onclick=async(e)=>{ e.stopPropagation(); let caseId = parseInt(btn.dataset.id); let textarea = document.getElementById(`comment-text-${caseId}`); let text = textarea.value; if(text.trim()){ await addComment(caseId, text); textarea.value = ''; } else alert("Введите текст"); };
+    });
+    document.querySelectorAll('.delete-comment-btn').forEach(btn=>{
+        btn.onclick=async(e)=>{ e.stopPropagation(); let commentId = parseInt(btn.dataset.commentId); let caseDiv = btn.closest('.case-item'); let caseId = parseInt(caseDiv.dataset.caseId); if(confirm("Удалить комментарий?")) await deleteComment(caseId, commentId); };
+    });
+    document.querySelectorAll('.comment-user').forEach(el=>{
+        let auth = el.dataset.author;
+        if(auth) el.onclick=()=>showProfile(auth);
     });
 }
 async function togglePin(uid, cur, uname) { let users=getUsers(); let idx=users.findIndex(u=>u.id===uid); if(idx===-1) return; users[idx].pinned=!cur; saveUsers(users); await logAct(`${cur?"Открепление":"Закрепление"} ${uname}`, curUser?.username, true); alert(`Профиль ${uname} ${cur?"откреплён":"закреплён"}`); if(curUser && curUser.id===uid) curUser.pinned=!cur; document.querySelector('.admin-panel-overlay')?.remove(); showAdminContent(); updSearch(); }
